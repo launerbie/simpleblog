@@ -3,10 +3,14 @@
             [compojure.core :refer :all])
   )
 
-(defn handler [req]
-  {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body "<h1> My simple blog page </h1>"})
+
+(defroutes handler
+  (GET "/" [] {:status 200
+               :headers {"Content-Type" "text/plain"}
+               :body    "<h1> My simple blog page </h1>"})
+  (GET "/posts" [] "<h1> My simple blog page </h1>")
+  (GET "/test/:name" [name] (str "Hello " name))
+  (GET "/test" [] "test"))
 
 (defn create-server [port]
   (s/run-server handler {:port port}))
