@@ -7,6 +7,7 @@
 (defn db-spec []
   {:dbtype "postgresql"
    :dbname "simpleblog"
+   :hostname "localhost"
    :user "simpleblog"
    :password "secretpassword"}) ;To do: load user/pass from file
 
