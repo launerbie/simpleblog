@@ -38,6 +38,10 @@
         postid ((first result) :id)]
      (jdbc/insert! (db-spec) :postdetail {:text body :posts (int postid)})))
 
+(defn get-post
+  [postid]
+  (jdbc/query (db-spec) ["SELECT title FROM posts WHERE id = ?" postid]))
+
 (defroutes handler
   (GET "/" [] {:status 200
                :headers {"Content-Type" "text/plain"}
