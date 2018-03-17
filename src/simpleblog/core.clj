@@ -34,7 +34,7 @@
 (defn insert-blogpost
   [title body]
   (let [result (jdbc/insert! (db-spec) :posts {:title title})
-        postid (get (first result) :id)]
+        postid ((first result) :id)]
      (jdbc/insert! (db-spec) :postdetail {:text body :posts (int postid)})))
 
 (defroutes handler
