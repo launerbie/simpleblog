@@ -1,8 +1,35 @@
 (ns simpleblog.core
   (:require [org.httpkit.server :as s]
+            [clojure.java.jdbc :as jdbc]
             [compojure.core :refer :all])
   )
 
+(defn db-spec []
+  {:dbtype "postgresql"
+   :dbname "simpleblog"
+   :user "simpleblog"
+   :password "secretpassword"}) ;To do: load user/pass from file
+
+(def posts-table-ddl
+  (jdbc/create-table-ddl
+    :posts
+    [[:id :serial "PRIMARY KEY"]
+     [:title "varchar(100)" ]]))
+
+(def postdetail-table-ddl
+  (jdbc/create-table-ddl
+    :postdetail
+    [[:id :serial :primary :key]
+     [:text "text"]
+     [:posts :int "REFERENCES posts"]]))
+
+(def comments-table-ddl
+  (jdbc/create-table-ddl
+    :comments
+    [[:id :serial :primary :key]
+     [:name "varchar(100)"]
+     [:comment "text"]
+     [:posts :int "REFERENCES posts"]]))
 
 (defroutes handler
   (GET "/" [] {:status 200
