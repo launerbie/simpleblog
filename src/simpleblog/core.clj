@@ -1,7 +1,9 @@
 (ns simpleblog.core
   (:require [org.httpkit.server :as s]
             [clojure.java.jdbc :as jdbc]
-            [compojure.core :refer :all])
+            [compojure.core :refer :all]
+            [ring.util.response :refer :all]
+            [ring.middleware.defaults :refer :all])
   )
 
 (defn db-spec []
@@ -42,17 +44,28 @@
   [postid]
   (jdbc/query (db-spec) ["SELECT title FROM posts WHERE id = ?" postid]))
 
+(defn post-blogpost
+  [req]
+  (let [title (get (:params req) :title)
+        body  (get (:params req) :body)]
+  (println req)
+  (insert-blogpost title body)
+  (str "Blog post has been submitted.")
+  ;(redirect "/posts")
+  ))
+
 (defroutes handler
   (GET "/" [] {:status 200
                :headers {"Content-Type" "text/plain"}
                :body    "<h1> My simple blog page </h1>"})
   (GET "/posts" [] "Show index of blog posts here.")
+  (POST "/posts" req (post-blogpost req))
   (GET "/posts/:id" [id] (str "Blog entry number: " (str id)))
   (GET "/test/:name" [name] (str "Hello " name))
   (GET "/test" [] "test"))
 
 (defn create-server [port]
-  (s/run-server handler {:port port}))
+  (s/run-server (wrap-defaults handler api-defaults) {:port port}))
 
 (defn stop-server [server]
   (server :timeout 100))

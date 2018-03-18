@@ -8,6 +8,8 @@
                  [org.postgresql/postgresql "9.4-1201-jdbc41"]
                  [http-kit "2.2.0"]
                  [compojure "1.6.0"]
+                 [ring/ring-defaults "0.3.1"]
+                 [ring "1.6.3"]
                  ]
   :main ^:skip-aot simpleblog.core
   :target-path "target/%s"
