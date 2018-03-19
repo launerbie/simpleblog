@@ -3,7 +3,8 @@
             [clojure.java.jdbc :as jdbc]
             [compojure.core :refer :all]
             [ring.util.response :refer :all]
-            [ring.middleware.defaults :refer :all])
+            [ring.middleware.defaults :refer :all]
+            [simpleblog.views :as views])
   )
 
 (defn db-spec []
@@ -44,6 +45,15 @@
   [postid]
   (jdbc/query (db-spec) ["SELECT title FROM posts WHERE id = ?" postid]))
 
+(defn blogposts-all []
+  (let [posts  (jdbc/query (db-spec)
+                  ["SELECT title, text
+                  FROM posts
+                  INNER JOIN postdetail
+                  ON posts.id = postdetail.posts"])]
+  (println posts)
+  (views/blogpost-index posts)))
+
 (defn post-blogpost
   [req]
   (let [title (get (:params req) :title)
@@ -55,17 +65,14 @@
   ))
 
 (defroutes handler
-  (GET "/" [] {:status 200
-               :headers {"Content-Type" "text/plain"}
-               :body    "<h1> My simple blog page </h1>"})
-  (GET "/posts" [] "Show index of blog posts here.")
-  (POST "/posts" req (post-blogpost req))
-  (GET "/posts/:id" [id] (str "Blog entry number: " (str id)))
-  (GET "/test/:name" [name] (str "Hello " name))
-  (GET "/test" [] "test"))
+  (GET  "/" [] (views/root))
+  (GET  "/newpost" [] (views/blogpost-new))
+  (POST "/newpost" req (post-blogpost req))
+  (GET  "/posts" [] (blogposts-all))
+  (GET  "/posts/:id" [id] (str "Blog entry number: " (str id))))
 
 (defn create-server [port]
-  (s/run-server (wrap-defaults handler api-defaults) {:port port}))
+  (s/run-server (wrap-defaults handler site-defaults) {:port port}))
 
 (defn stop-server [server]
   (server :timeout 100))

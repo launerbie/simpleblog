@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/java.jdbc "0.7.5"]
                  [org.postgresql/postgresql "9.4-1201-jdbc41"]
+                 [hiccup "1.0.5"]
                  [http-kit "2.2.0"]
                  [compojure "1.6.0"]
                  [ring/ring-defaults "0.3.1"]
