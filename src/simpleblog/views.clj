@@ -24,3 +24,6 @@
           [:p (:text post)]))
   )))
 
+(defn four-o-four []
+  (base "Simpleblog - Page not found" [:h1 "Page not found"]))
+

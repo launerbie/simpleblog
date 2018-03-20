@@ -2,6 +2,7 @@
   (:require [org.httpkit.server :as s]
             [clojure.java.jdbc :as jdbc]
             [compojure.core :refer :all]
+            [compojure.route :as route]
             [ring.util.response :refer :all]
             [ring.middleware.defaults :refer :all]
             [simpleblog.views :as views])
@@ -71,7 +72,6 @@
   [req]
   (let [title (get (:params req) :title)
         body  (get (:params req) :body)]
-  (println req)
   (insert-blogpost title body)
   (str "Blog post has been submitted.")
   ;(redirect "/posts")
@@ -82,7 +82,8 @@
   (GET  "/newpost" [] (views/blogpost-new))
   (POST "/newpost" req (post-blogpost req))
   (GET  "/posts" [] (blogposts-all))
-  (GET  "/posts/:id" [id] (str "Blog entry number: " (str id))))
+  (GET  "/posts/:id" [id] (str "Blog entry number: " (str id)))
+  (route/not-found (views/four-o-four)))
 
 (defn create-server [port]
   (s/run-server (wrap-defaults handler site-defaults) {:port port}))
