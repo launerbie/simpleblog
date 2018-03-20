@@ -35,6 +35,19 @@
      [:comment "text"]
      [:posts :int "REFERENCES posts"]]))
 
+(defn create-tables []
+  (jdbc/db-do-commands (db-spec) posts-table-ddl)
+  (jdbc/db-do-commands (db-spec) postdetail-table-ddl)
+  (jdbc/db-do-commands (db-spec) comments-table-ddl))
+
+(defn drop-tables []
+  (jdbc/db-do-commands (db-spec) ["DROP TABLE comments"])
+  (jdbc/db-do-commands (db-spec) ["DROP TABLE postdetail"])
+  (jdbc/db-do-commands (db-spec) ["DROP TABLE posts"]))
+
+(defn recreate-tables []
+  (comp drop-tables create-tables))
+
 (defn insert-blogpost
   [title body]
   (let [result (jdbc/insert! (db-spec) :posts {:title title})
