@@ -61,9 +61,9 @@
 (defn blogposts-all []
   (let [posts  (jdbc/query (db-spec)
                   ["SELECT title, text
-                  FROM posts
-                  INNER JOIN postdetail
-                  ON posts.id = postdetail.posts"])]
+                    FROM posts
+                    INNER JOIN postdetail
+                    ON posts.id = postdetail.posts"])]
   (println posts)
   (views/blogpost-index posts)))
 
