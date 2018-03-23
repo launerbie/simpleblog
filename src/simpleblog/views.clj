@@ -4,7 +4,7 @@
             [hiccup.core :refer [html]]))
 
 (defn base
-  [title body]
+  [title & body]
   (h/html5
     [:head
      [:title title]]
@@ -18,11 +18,11 @@
   (base "Simpleblog - New Post" [:h1 "Submit a new blog post"]))
 
 (defn blogpost-index [posts]
-  (base "Simpleblog - Index" (html
+  (base "Simpleblog - Index"
         (for [post posts] (html
           [:h3 (:title post)]
           [:p (:text post)]))
-  )))
+  ))
 
 (defn four-o-four []
   (base "Simpleblog - Page not found" [:h1 "Page not found"]))
