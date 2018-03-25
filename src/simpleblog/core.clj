@@ -65,7 +65,8 @@
                   ["SELECT title, text
                     FROM posts
                     INNER JOIN postdetail
-                    ON posts.id = postdetail.posts"])]
+                    ON posts.id = postdetail.posts
+                    ORDER BY posts.id DESC"])]
   (println posts)
   (views/blogpost-index posts)))
 
