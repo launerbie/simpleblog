@@ -3,6 +3,7 @@
             [clojure.java.jdbc :as jdbc]
             [compojure.core :refer :all]
             [compojure.route :as route]
+            [clojure.pprint :as pp]
             [ring.util.response :refer :all]
             [ring.middleware.defaults :refer :all]
             [simpleblog.views :as views])
@@ -70,11 +71,11 @@
 
 (defn post-blogpost
   [req]
-  (let [title (get (:params req) :title)
-        body  (get (:params req) :body)]
+  (pp/pprint req)
+  (let [title (get-in req [:params :title])
+        body  (get-in req [:params :body])]
   (insert-blogpost title body)
   (str "Blog post has been submitted.")
-  ;(redirect "/posts")
   ))
 
 (defroutes handler
